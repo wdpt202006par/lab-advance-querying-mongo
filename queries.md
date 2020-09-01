@@ -32,10 +32,30 @@ skip:
 limit:      
 ```
 
+or with *implicit `$and`*:
+
+```
+query:      {founded_year: {$gte: 2000, $lte: 2005}}
+projection: {name: 1, founded_year: 1, _id: 0}
+sort:       
+skip:       
+limit: 
+```
+
 ### 4. All the companies that had a Valuation Amount of more than 100.000.000 and have been founded before 2010. Retrieve only the `name` and `ipo` fields.
 
 ```
 query:      { $and: [{"ipo.valuation_amount": {$gt: 100000000}}, {founded_year: {$lte: 2010}} ] }
+projection: {name: 1, ipo: 1, _id: 0}
+sort:       
+skip:       
+limit:      
+```
+
+or with *implicit `$and`*:
+
+```
+query:      {"ipo.valuation_amount": {$gt: 100000000}, founded_year: {$lte: 2010} }
 projection: {name: 1, ipo: 1, _id: 0}
 sort:       
 skip:       
@@ -50,6 +70,16 @@ projection:
 sort:       {number_of_employees: 1}
 skip:       
 limit:      10
+```
+
+or with *implicit `$and`*:
+
+```
+query:      { number_of_employees: {$lt: 1000}, founded_year: {$lt: 2005} }
+projection: {number_of_employees: 1}
+sort:       
+skip:       
+limit:      
 ```
 
 ### 6. All the companies that don't include the `partners` field.
@@ -82,10 +112,21 @@ skip:
 limit:      
 ```
 
+or with *implicit `$and`*:
+
+```
+query:      {number_of_employees: {$gte: 100, $lt: 1000}}
+projection: {name: 1, number_of_employees: 1}
+sort:       
+skip:       
+limit:      
+```
+
+
 ### 9. Order all the companies by their IPO price descendently.
 
 ```
-query:      
+query:      {}
 projection: 
 sort:       {"ipo.valuation_amount": -1}
 skip:       
@@ -95,9 +136,9 @@ limit:
 ### 10. Retrieve the 10 companies with more employees, order by the `number of employees`
 
 ```
-query:      {number_of_employees: -1}
+query:      
 projection: 
-sort:       
+sort:       {number_of_employees: -1}
 skip:       
 limit:      10
 ```
@@ -109,13 +150,33 @@ query:      {$and: [{founded_month: {$gte: 6}}, {founded_month: {$lte: 12}}] }
 projection: 
 sort:       
 skip:       
-limit:      
+limit:      1000
+```
+
+or with *implicit `$and`*:
+
+```
+query:      {founded_month: {$gte: 6, $lte: 12}}
+projection: 
+sort:       
+skip:       
+limit:      1000
 ```
 
 ### 12. All the companies founded before 2000 that have and acquisition amount of more than 10.000.000
 
 ```
 query:      {$and: [ {founded_year: {$lt: 2000}} , { "acquisition.price_amount": {$gt: 10000000} } ]}
+projection: 
+sort:       
+skip:       
+limit:      
+```
+
+or with *implicit `$and`*:
+
+```
+query:      {founded_year: {$lt: 2000}, "acquisition.price_amount": {$gt: 10000000} }
 projection: 
 sort:       
 skip:       
@@ -149,13 +210,23 @@ query:      {founded_day: {$lte: 7}}
 projection: 
 sort:       {"acquisition.price_amount": -1}
 skip:       
-limit:      
+limit:      10
 ```
 
 ### 16. All the companies on the 'web' `category` that have more than 4000 employees. Sort them by the amount of employees in ascendant order.
 
 ```
 query:      {$and: [{category_code: "web"}, {number_of_employees: {$gt: 4000}} ]}
+projection: 
+sort:       {number_of_employees: 1}
+skip:       
+limit:      
+```
+
+or with *implicit `$and`*:
+
+```
+query:      {category_code: "web", number_of_employees: {$gt: 4000}}
 projection: 
 sort:       {number_of_employees: 1}
 skip:       
@@ -172,6 +243,18 @@ skip:
 limit:      
 ```
 
+or with *implicit `$and`*:
+
+```
+query:      {"acquisition.price_amount": {$gt: 1e7}, "acquisition.price_currency_code": "EUR"}
+projection: 
+sort:       
+skip:       
+limit:      
+```
+
+
+
 ### 18. All the companies that have been acquired on the first trimester of the year. Limit the search to 10 companies, and retrieve only their `name` and `acquisition` fields.
 
 ```
@@ -186,6 +269,16 @@ limit:      10
 
 ```
 query:      {$and: [ {founded_year: {$gte: 2000}}, {founded_year: {$lte: 2010}}, {"acquisition.acquired_year": {$gt: 2011}} ]}
+projection: 
+sort:       
+skip:       
+limit:      
+```
+
+or with *implicit `$and`*:
+
+```
+query:      {founded_year: {$gte: 2000,$lte: 2010}, "acquisition.acquired_year": {$gt: 2011}}
 projection: 
 sort:       
 skip:       
